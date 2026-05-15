@@ -7,12 +7,19 @@ import productRoutes from "./routes/productRoutes";
 import orderRoutes from "./routes/orderRoutes";
 import userRoutes from "./routes/userRoutes";
 
+import swaggerUi from "swagger-ui-express";
+
+import swaggerSpec from "./swagger";
+
 dotenv.config();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.use("/api", testRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
