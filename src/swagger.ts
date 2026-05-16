@@ -10,11 +10,20 @@ const options = {
       description: "API documentation for She Style Fashion Store",
     },
 
+    // servers: [
+    //   {
+    //     url: "http://localhost:5000/api",
+    //   },
+    // ],
+
     servers: [
-      {
-        url: "http://localhost:5000/api",
-      },
-    ],
+  {
+    url:
+      process.env.NODE_ENV === "production"
+        ? "https://she-style-api.onrender.com/api"
+        : "http://localhost:5000/api",
+  },
+],
 
     components: {
       securitySchemes: {
