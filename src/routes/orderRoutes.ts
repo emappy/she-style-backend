@@ -4,6 +4,7 @@ import {
   createOrder,
   getMyOrders,
   getAllOrders,
+  updateOrderStatus,
 } from "../controllers/orderController";
 
 import authMiddleware from "../middleware/authMiddleware";
@@ -62,5 +63,7 @@ router.post("/", authMiddleware, createOrder);
 router.get("/", authMiddleware, adminMiddleware, getAllOrders);
 
 router.get("/my-orders", authMiddleware, getMyOrders);
+
+router.put("/:id/status", authMiddleware, adminMiddleware, updateOrderStatus);
 
 export default router;

@@ -38,10 +38,22 @@ model Product {
   orderItems OrderItem[]
 }
 
+// model Order {
+//   id          Int         @id @default(autoincrement())
+//   userId      Int
+//   totalAmount Float
+//   createdAt   DateTime    @default(now())
+
+//   user        User        @relation(fields: [userId], references: [id])
+
+//   items       OrderItem[]
+// }
+
 model Order {
   id          Int         @id @default(autoincrement())
   userId      Int
   totalAmount Float
+  status      String      @default("PENDING")
   createdAt   DateTime    @default(now())
 
   user        User        @relation(fields: [userId], references: [id])

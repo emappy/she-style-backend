@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 
 import prisma from "../config/prisma";
 
@@ -96,6 +96,87 @@ export const getAllOrders = async (req: AuthRequest, res: Response) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch orders",
+    });
+  }
+};
+
+export const updateOrderStatus = async (req: Request, res: Response) => {
+  try {
+    const orderId = Number(req.params.id);
+
+    const { status } = req.body;
+
+    const order = await prisma.order.findUnique({
+      where: {
+        id: orderId,
+      },
+
+      include: {
+        items: true,
+      },
+    });
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    // DELIVERED
+    if (status === "DELIVERED" && order.status !== "DELIVERED") {
+      for (const item of order.items) {
+        await prisma.product.update({
+          where: {
+            id: item.productId,
+          },
+
+          data: {
+            stock: {
+              decrement: item.quantity,
+            },
+          },
+        });
+      }
+    }
+
+    // CANCELED
+    if (status === "CANCELED" && order.status === "DELIVERED") {
+      for (const item of order.items) {
+        await prisma.product.update({
+          where: {
+            id: item.productId,
+          },
+
+          data: {
+            stock: {
+              increment: item.quantity,
+            },
+          },
+        });
+      }
+    }
+
+    const updatedOrder = await prisma.order.update({
+      where: {
+        id: orderId,
+      },
+
+      data: {
+        status,
+      },
+    });
+
+    res.json({
+      success: true,
+      order: updatedOrder,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to update order status",
     });
   }
 };
