@@ -20,7 +20,7 @@ const options = {
   {
     url:
       process.env.NODE_ENV === "production"
-        ? "https://she-style-api.onrender.com/api"
+        ? "https://she-style-api.onrender.com"
         : "http://localhost:5000/api",
   },
 ],
