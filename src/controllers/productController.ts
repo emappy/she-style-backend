@@ -31,28 +31,6 @@ export const createProduct = async (req: Request, res: Response) => {
   }
 };
 
-// export const getProducts = async (req: Request, res: Response) => {
-//   try {
-//     const products = await prisma.product.findMany({
-//       include: {
-//         category: true,
-//       },
-//       orderBy: {
-//         createdAt: "desc",
-//       },
-//     });
-
-//     res.json({
-//       success: true,
-//       products,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message: "Failed to fetch products",
-//     });
-//   }
-// };
 export const getSingleProduct = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
